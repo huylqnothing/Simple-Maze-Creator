@@ -23,9 +23,17 @@ public class MapGenerator : MonoBehaviour
     {
         Observer.Instance.Subscribe(GameConstants.ObserverKey.OnSolveNotify, this.Solve);
         Observer.Instance.Subscribe(GameConstants.ObserverKey.OnReplayNotify, this.Replay);
+        Observer.Instance.Subscribe(GameConstants.ObserverKey.OnWidthHeightModified, this.OnWidthHeightModified);
         this.mapMatrix = new string[this.mapWidth, this.mapHeight];
         this.GenerateMap();
         this.GenerateMapObject();
+    }
+
+    private void OnWidthHeightModified(object param)
+    {
+        Vector2Int output = param is Vector2Int ? (Vector2Int)param : default;
+        this.mapWidth = output.x;
+        this.mapHeight = output.y;
     }
 
     private void GenerateMap()

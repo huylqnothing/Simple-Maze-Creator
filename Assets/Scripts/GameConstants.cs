@@ -13,5 +13,6 @@ public class GameConstants
         public static string OnSolveNotify = "OnSolveNotify";
         public static string OnReplayNotify = "OnReplayNotify";
         public static string OnMapModified = "OnMapModified";
+        public static string OnWidthHeightModified = "OnWidthHeightModified";
     }
 }
