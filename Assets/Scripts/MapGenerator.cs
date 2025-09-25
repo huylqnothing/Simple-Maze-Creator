@@ -98,13 +98,45 @@ public class MapGenerator : MonoBehaviour
 
             if (!moved)
             {
-                Debug.Log("Could not found any move");
-                mapMatrix[current.x, current.y] = GameConstants.TileKey.Destination;
-                mainPathCells.Add(current);
+                bool foundAlternative = false;
 
-                break;
+                // track nguoc lai xem co tile nao di duoc tiep de hon khong
+                for (int i = mainPathCells.Count - 1; i >= 0; i--)
+                {
+                    var cell = mainPathCells[i];
+
+                    foreach (var d in dirs)
+                    {
+                        int nx = cell.x + d.x;
+                        int ny = cell.y + d.y;
+
+                        if (nx > 0 && nx < mapWidth - 1 &&
+                            ny > 0 && ny < mapHeight - 1 &&
+                            mapMatrix[nx, ny] == GameConstants.TileKey.Wall &&
+                            CountEmptyNeighbors(nx, ny) <= 1)
+                        {
+                            current          = new Vector2Int(nx, ny);
+                            foundAlternative = true;
+
+                            break;
+                        }
+                    }
+
+                    if (foundAlternative) break;
+                }
+
+                if (!foundAlternative)
+                {
+                    Debug.Log("Main path completely blocked, setting Destination");
+                    mapMatrix[current.x, current.y] = GameConstants.TileKey.Destination;
+                    mainPathCells.Add(current);
+
+                    break;
+                }
             }
         }
+
+        DebugDrawMainPath(mainPathCells);
 
         // branch flood-fill expansion
         List<Vector2Int> candidates = new List<Vector2Int>(mainPathCells);
@@ -361,4 +393,21 @@ public class MapGenerator : MonoBehaviour
     }
 
     #endregion
+
+#if UNITY_EDITOR
+    private void DebugDrawMainPath(List<Vector2Int> mainPathCells)
+    {
+        if (mainPathCells.Count < 2) return;
+
+        float offsetX = this.mapWidth / 2f;
+        float offsetY = this.mapHeight / 2f;
+
+        for (int i = 0; i < mainPathCells.Count - 1; i++)
+        {
+            Vector3 a = new Vector3(mainPathCells[i].x - offsetX, mainPathCells[i].y - offsetY, 0);
+            Vector3 b = new Vector3(mainPathCells[i + 1].x - offsetX, mainPathCells[i + 1].y - offsetY, 0);
+            Debug.DrawLine(a, b, Color.blue, 10f); // giữ line trong 10s
+        }
+    }
+#endif
 }
