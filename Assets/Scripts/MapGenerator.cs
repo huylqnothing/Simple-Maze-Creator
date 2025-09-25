@@ -15,8 +15,9 @@ public class MapGenerator : MonoBehaviour
 
     private string[,]        mapMatrix;
     private List<GameObject> spawnedObjects = new List<GameObject>();
-    private List<GameObject> spawnedPath = new List<GameObject>();
+    private List<GameObject> spawnedPath    = new List<GameObject>();
     private Agent            agent;
+    private bool             isCurrentMapSolved;
 
     void Start()
     {
@@ -29,6 +30,9 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateMap()
     {
+        // set current map solved = false
+        this.isCurrentMapSolved = false;
+
         // fill all walls
         for (int y = 0; y < this.mapHeight; y++)
         {
@@ -254,6 +258,10 @@ public class MapGenerator : MonoBehaviour
 
     private void Solve(object param)
     {
+        if (this.isCurrentMapSolved)
+            return;
+
+        this.isCurrentMapSolved = true;
         Vector2Int start = Vector2Int.zero;
         Vector2Int goal  = Vector2Int.zero;
 

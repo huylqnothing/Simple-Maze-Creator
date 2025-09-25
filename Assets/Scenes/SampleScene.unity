@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapWidth: 50
-  mapHeight: 50
+  mapHeight: 40
   pathPrefab: {fileID: 6467213282478493647, guid: 9bdab6b899739224a87548dd2de26a95, type: 3}
   wallPrefab: {fileID: 6723397507104563794, guid: 24c387a84170d1144baa87bbbcd00270, type: 3}
   destinationPrefab: {fileID: 2473766063321815937, guid: f97e21571e71b7d41a0b0ac20809b6da, type: 3}
